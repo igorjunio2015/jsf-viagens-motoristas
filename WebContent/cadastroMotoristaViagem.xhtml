@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Cadastro de Viagem Motorista</title>
+</h:head>
+<h:body>
+	<p:menubar>
+		<p:submenu label="Cadastrar/Editar/Listar" icon="pi pi-file">
+			<p:submenu label="Novo" icon="pi pi-briefcase">
+				<p:menuitem value="Categoria CNH" url="cadastroCategoriaCnh.xhtml"/>
+				<p:menuitem value="Viagem Motorista" url="cadastroMotoristaViagem.xhtml"/>
+			</p:submenu>
+		</p:submenu>
+	</p:menubar>
+	<h:form>
+		<p:growl/>
+		<p:panel header="Cadastro de Viagem Motorista">
+			<h:panelGrid columns="2">
+				<h:outputText value="Nome motorista:* "/>
+				<p:inputText value="#{motoristaViagemControllerIgor.motoristaViagemIgor.nomeMotorista}" required="true" requiredMessage="Nome motorista é obrigatório">
+					<f:validateLength maximum="60"/>
+				</p:inputText>
+				<h:outputText value="Categoria CNH:* "/>
+				<p:selectOneMenu value="#{motoristaViagemControllerIgor.categoriaSelecionado}" required="true" requiredMessage="Categória é obrigatório" converter="categoriaCnhConverterIgor">
+					<f:selectItem itemLabel="--SELECIONE--"/>
+					<f:selectItems value="#{categoriaCnhControllerIgor.lista}" var="categoriaCnh" itemValue="#{categoriaCnh}" itemLabel="#{categoriaCnh.descricao}"/>
+				</p:selectOneMenu>
+				<h:outputText value="Destino:* "/>
+				<p:inputText value="#{motoristaViagemControllerIgor.motoristaViagemIgor.destino}" required="true" requiredMessage="Destino é obrigatório">
+					<f:validateLength maximum="80"/>
+				</p:inputText>
+				<h:outputText value="Distancia:* "/>
+				<p:inputText value="#{motoristaViagemControllerIgor.motoristaViagemIgor.distancia}" required="true" requiredMessage="Distância é obrigatório"/>
+				<h:outputText value="Valor KM:* "/>
+				<p:inputText value="#{motoristaViagemControllerIgor.motoristaViagemIgor.valorKm}" required="true" requiredMessage="Valor KM é obrigatório"/>
+				<h:outputText value="Data Corrida:* "/>
+				<p:datePicker value="#{motoristaViagemControllerIgor.motoristaViagemIgor.dataCorrida}" required="true" requiredMessage="Data corrida é obrigatório" pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+				<p:commandButton ajax="false"  value="Salvar" action="#{motoristaViagemControllerIgor.salvar}"/>
+				<p:commandButton ajax="false"  value="Limpar" action="cadastroMotoristaViagem.xhtml" actionListener="#{motoristaViagemControllerIgor.limparCampos}" immediate="true"/>
+			</h:panelGrid>
+		</p:panel>
+	</h:form>
+	<h:form>
+		<p:panel header="Lista de Viagem Motorista">
+			<p:dataTable value="#{motoristaViagemControllerIgor.lista}" var="motoristaViagem" border="1">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Id"/>
+					</f:facet>
+					<h:outputText value="#{motoristaViagem.id}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Nome motorista"/>
+					</f:facet>
+					<h:outputText value="#{motoristaViagem.nomeMotorista}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Id categoria CNH"/>
+					</f:facet>
+					<h:outputText value="#{motoristaViagem.categoriaCnhIgor.id}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Desc Categoria CNH"/>
+					</f:facet>
+					<h:outputText value="#{motoristaViagem.categoriaCnhIgor.descricao}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Destino"/>
+					</f:facet>
+					<h:outputText value="#{motoristaViagem.destino}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Distancia"/>
+					</f:facet>
+					<h:outputText value="#{motoristaViagem.distancia}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Valor KM"/>
+					</f:facet>
+					<h:outputText value="#{motoristaViagem.valorKm}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Data Corrida"/>
+					</f:facet>
+					<h:outputText value="#{motoristaViagem.dataCorrida}">
+						<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+					</h:outputText>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Valor Desconto"/>
+					</f:facet>
+					<h:outputText value="#{motoristaViagem.valorDesconto}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Valor Total"/>
+					</f:facet>
+					<h:outputText value="#{motoristaViagem.valorTotal}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Ações"/>
+					</f:facet>
+					<p:commandButton ajax="false"  value="Editar" action="#{motoristaViagemControllerIgor.editar}">
+						<f:setPropertyActionListener value="#{motoristaViagem}" target="#{motoristaViagemControllerIgor.motoristaViagemIgor}"/>
+					</p:commandButton>
+					<p:commandButton ajax="false"  value="Excluir" action="#{motoristaViagemControllerIgor.excluir}">
+						<f:setPropertyActionListener value="#{motoristaViagem}" target="#{motoristaViagemControllerIgor.motoristaViagemIgor}"/>
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+</h:body>
+</html>
